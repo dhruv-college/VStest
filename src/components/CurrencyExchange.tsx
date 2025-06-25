@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -143,7 +143,7 @@ const CurrencyExchange = () => {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Price Impact</span>
-                <span className="text-green-400">< 0.01%</span>
+                <span className="text-green-400">&lt; 0.01%</span>
               </div>
             </div>
           </CardContent>
