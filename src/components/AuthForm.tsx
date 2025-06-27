@@ -16,16 +16,28 @@ const AuthForm = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Sign up form submitted');
     setIsLoading(true);
-    await signUp(email, password);
-    setIsLoading(false);
+    try {
+      await signUp(email, password);
+    } catch (error) {
+      console.error('Sign up failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Sign in form submitted');
     setIsLoading(true);
-    await signIn(email, password);
-    setIsLoading(false);
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error('Sign in failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -33,12 +33,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log('Setting up auth state listener...');
+    
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session);
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          console.log('User authenticated, fetching profile...');
           setTimeout(() => {
             fetchUserProfile(session.user.id);
           }, 0);
@@ -47,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -58,12 +63,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
+    console.log('Fetching user profile for:', userId);
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('wallet_address')
         .eq('user_id', userId)
         .single();
+      
+      console.log('Profile data:', data, 'Error:', error);
       
       if (data?.wallet_address) {
         setWalletAddress(data.wallet_address);
@@ -75,6 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string) => {
+    console.log('Attempting to sign up with email:', email);
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -85,7 +94,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
     
+    console.log('Sign up result:', { error });
+    
     if (error) {
+      console.error('Sign up error:', error);
       toast({
         title: "Error",
         description: error.message,
@@ -102,29 +114,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signIn = async (email: string, password: string) => {
+    console.log('Attempting to sign in with email:', email);
+    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
     
+    console.log('Sign in result:', { error });
+    
     if (error) {
+      console.error('Sign in error:', error);
       toast({
         title: "Error",
         description: error.message,
         variant: "destructive"
       });
+    } else {
+      console.log('Sign in successful!');
     }
     
     return { error };
   };
 
   const signOut = async () => {
+    console.log('Signing out...');
     await supabase.auth.signOut();
     setWalletAddress(null);
     setIsConnected(false);
   };
 
   const connectWallet = async () => {
+    console.log('Attempting to connect wallet...');
     try {
       if (typeof window.ethereum !== 'undefined') {
         const accounts = await window.ethereum.request({
@@ -132,6 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
         
         const address = accounts[0];
+        console.log('Wallet connected:', address);
         setWalletAddress(address);
         setIsConnected(true);
         
@@ -148,6 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           description: "Wallet connected successfully!",
         });
       } else {
+        console.error('MetaMask not found');
         toast({
           title: "Error",
           description: "MetaMask is not installed",
