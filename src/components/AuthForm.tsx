@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,13 +13,18 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signUp, signIn, connectWallet } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Sign up form submitted');
     setIsLoading(true);
     try {
-      await signUp(email, password);
+      const { error } = await signUp(email, password);
+      if (!error) {
+        // Redirect to dashboard after successful signup
+        navigate('/');
+      }
     } catch (error) {
       console.error('Sign up failed:', error);
     } finally {
@@ -32,7 +37,11 @@ const AuthForm = () => {
     console.log('Sign in form submitted');
     setIsLoading(true);
     try {
-      await signIn(email, password);
+      const { error } = await signIn(email, password);
+      if (!error) {
+        // Redirect to dashboard after successful signin
+        navigate('/');
+      }
     } catch (error) {
       console.error('Sign in failed:', error);
     } finally {
