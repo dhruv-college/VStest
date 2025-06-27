@@ -9,13 +9,99 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          username: string | null
+          wallet_address: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number | null
+          created_at: string
+          id: string
+          status: string | null
+          token_symbol: string | null
+          transaction_hash: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          id?: string
+          status?: string | null
+          token_symbol?: string | null
+          transaction_hash?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          id?: string
+          status?: string | null
+          token_symbol?: string | null
+          transaction_hash?: string | null
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
