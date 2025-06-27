@@ -2,8 +2,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Wallet, TrendingUp, DollarSign } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const DashboardHeader = () => {
+  const { connectWallet, isConnected } = useAuth();
+
   return (
     <div className="space-y-6">
       {/* Main Header */}
@@ -61,13 +64,18 @@ const DashboardHeader = () => {
         </Card>
       </div>
 
-      {/* Connect Wallet Button */}
-      <div className="flex justify-center">
-        <Button className="bg-gradient-defi hover:opacity-90 text-white px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-          <Wallet className="mr-2 h-5 w-5" />
-          Connect MetaMask
-        </Button>
-      </div>
+      {/* Connect Wallet Button - Only show if not connected */}
+      {!isConnected && (
+        <div className="flex justify-center">
+          <Button 
+            onClick={connectWallet}
+            className="bg-gradient-defi hover:opacity-90 text-white px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <Wallet className="mr-2 h-5 w-5" />
+            Connect MetaMask
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { User, Wallet, Copy, CheckCircle } from 'lucide-react';
+import UserPortfolio from '@/components/UserPortfolio';
 
 interface Profile {
   username: string;
@@ -126,10 +127,13 @@ const ProfileSection = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Portfolio Overview */}
+      <UserPortfolio />
+
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-white">Your Profile</h2>
-        <p className="text-gray-400">Manage your account and view your activity</p>
+        <h2 className="text-3xl font-bold text-white">Account Settings</h2>
+        <p className="text-gray-400">Manage your profile and wallet connection</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -206,7 +210,7 @@ const ProfileSection = () => {
                       variant="outline"
                       size="sm"
                       onClick={copyWalletAddress}
-                      className="border-white/20 text-white hover:bg-white/10"
+                      className="border-white/40 text-white hover:bg-white/20 bg-white/10"
                     >
                       {copied ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
@@ -214,7 +218,7 @@ const ProfileSection = () => {
                 </div>
                 <div className="flex items-center gap-2 text-green-400">
                   <CheckCircle className="h-4 w-4" />
-                  <span className="text-sm">Wallet Connected</span>
+                  <span className="text-sm">Wallet Connected Successfully</span>
                 </div>
               </div>
             ) : (
@@ -222,8 +226,9 @@ const ProfileSection = () => {
                 <p className="text-gray-400">Connect your MetaMask wallet to start trading</p>
                 <Button
                   onClick={connectWallet}
-                  className="w-full bg-gradient-defi hover:opacity-90 text-white"
+                  className="w-full bg-gradient-defi hover:opacity-90 text-white border-white/40 hover:bg-white/20 bg-white/10"
                 >
+                  <Wallet className="mr-2 h-4 w-4" />
                   Connect MetaMask
                 </Button>
               </div>
