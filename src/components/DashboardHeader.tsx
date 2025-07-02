@@ -8,26 +8,26 @@ const DashboardHeader = () => {
   const { connectWallet, isConnected } = useAuth();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Main Header */}
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-4">
+      <div className="text-center space-y-2">
+        <div className="flex items-center justify-center gap-3">
           <img 
             src="/lovable-uploads/7b92f9dd-0a94-474f-b504-b3d12723ef7b.png" 
             alt="VaultSpark Logo" 
-            className="h-16 w-16"
+            className="h-12 w-12"
           />
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
             VaultSpark
           </h1>
         </div>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-300 max-w-2xl mx-auto">
           DeFi, Reinvented. Experience programmable liquidity, auto-compounding vaults, and dynamic fee models.
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="bg-gradient-card backdrop-blur-sm border-white/10 hover:border-defi-primary/50 transition-all duration-300">
           <CardContent className="p-6">
             <div className="flex items-center space-x-4">

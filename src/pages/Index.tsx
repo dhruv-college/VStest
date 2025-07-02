@@ -56,15 +56,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="container mx-auto px-4 py-6">
-        {/* Header with sign out */}
-        <div className="flex justify-between items-start mb-6">
-          <DashboardHeader />
+      <div className="container mx-auto px-4 py-4">
+        {/* Header with sign out - compact layout */}
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1">
+            <DashboardHeader />
+          </div>
           <Button
             onClick={handleSignOut}
             variant="ghost"
             size="sm"
-            className="text-white/80 hover:text-white hover:bg-white/10 mt-2"
+            className="text-white/80 hover:text-white hover:bg-white/10 ml-4"
           >
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out
