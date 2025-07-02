@@ -9,6 +9,7 @@ import BorrowLend from "@/components/BorrowLend";
 import ProfileSection from "@/components/ProfileSection";
 import AdminAnalytics from "@/components/AdminAnalytics";
 import DashboardHeader from "@/components/DashboardHeader";
+import AIInsights from "@/components/AIInsights";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { LogOut, User, BarChart3 } from "lucide-react";
@@ -55,23 +56,25 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+      <div className="container mx-auto px-4 py-6">
+        {/* Header with sign out */}
+        <div className="flex justify-between items-start mb-6">
           <DashboardHeader />
-          <div className="flex items-center">
-            <Button
-              onClick={handleSignOut}
-              variant="ghost"
-              size="sm"
-              className="text-white/80 hover:text-white hover:bg-white/10"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
+          <Button
+            onClick={handleSignOut}
+            variant="ghost"
+            size="sm"
+            className="text-white/80 hover:text-white hover:bg-white/10 mt-2"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
         
-        <div className="mt-8">
+        {/* AI Insights Section */}
+        <AIInsights />
+        
+        <div className="mt-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-5' : 'grid-cols-4'} bg-black/20 backdrop-blur-sm border border-white/10`}>
               <TabsTrigger 
