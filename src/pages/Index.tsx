@@ -58,13 +58,12 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <DashboardHeader />
-          <div className="flex items-center gap-4">
-            <span className="text-white text-sm">Welcome, {user.email}</span>
+          <div className="flex items-center">
             <Button
               onClick={handleSignOut}
-              variant="outline"
+              variant="ghost"
               size="sm"
-              className="border-white/40 text-white hover:bg-white/20 hover:border-white/60 bg-white/10"
+              className="text-white/80 hover:text-white hover:bg-white/10"
             >
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out

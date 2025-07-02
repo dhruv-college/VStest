@@ -11,9 +11,16 @@ const DashboardHeader = () => {
     <div className="space-y-6">
       {/* Main Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-          BlockDAG DeFi
-        </h1>
+        <div className="flex items-center justify-center gap-4">
+          <img 
+            src="/lovable-uploads/7b92f9dd-0a94-474f-b504-b3d12723ef7b.png" 
+            alt="VaultSpark Logo" 
+            className="h-16 w-16"
+          />
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            VaultSpark
+          </h1>
+        </div>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
           DeFi, Reinvented. Experience programmable liquidity, auto-compounding vaults, and dynamic fee models.
         </p>
