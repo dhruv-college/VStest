@@ -53,7 +53,7 @@ const AuthForm = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-gradient-card backdrop-blur-sm border-white/10">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-white">Welcome to BlockDAG</CardTitle>
+          <CardTitle className="text-2xl text-white">Welcome to VaultSpark</CardTitle>
           <CardDescription className="text-gray-400">
             Sign in to access your DeFi dashboard
           </CardDescription>
