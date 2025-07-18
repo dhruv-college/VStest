@@ -21,6 +21,14 @@ const BorrowLend = () => {
       description: "Stable yield with USDC lending"
     },
     {
+      token: "BDAG",
+      apy: 15.7,
+      tvl: 420000,
+      utilization: 58,
+      yourDeposit: 850000,
+      description: "High yield BlockDAG lending pool"
+    },
+    {
       token: "ETH",
       apy: 12.3,
       tvl: 850000,
@@ -46,6 +54,14 @@ const BorrowLend = () => {
       collateralRatio: 150,
       liquidationThreshold: 85,
       description: "Borrow USDC against ETH collateral"
+    },
+    {
+      token: "BDAG",
+      apr: 11.8,
+      available: 850000,
+      collateralRatio: 130,
+      liquidationThreshold: 75,
+      description: "Borrow BlockDAG with competitive rates"
     },
     {
       token: "ETH",

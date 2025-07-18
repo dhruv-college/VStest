@@ -14,6 +14,7 @@ const CurrencyExchange = () => {
 
   const tokens = [
     { symbol: "ETH", name: "Ethereum", price: 2300, change: 5.2 },
+    { symbol: "BDAG", name: "BlockDAG", price: 0.0178, change: 12.4 },
     { symbol: "USDC", name: "USD Coin", price: 1.00, change: 0.1 },
     { symbol: "USDT", name: "Tether", price: 1.00, change: -0.05 },
     { symbol: "DAI", name: "DAI", price: 1.00, change: 0.2 },
