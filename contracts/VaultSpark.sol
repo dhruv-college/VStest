@@ -53,7 +53,7 @@ contract VaultSpark is ReentrancyGuard, Ownable {
     event Withdraw(address indexed user, address token, uint256 amount);
     event Repay(address indexed user, address token, uint256 amount);
     
-    constructor() {
+    constructor() Ownable(msg.sender) {
         // Initialize with some default rates
         lendingRates[address(0)] = 500; // 5% for ETH
         borrowingRates[address(0)] = 800; // 8% for ETH
