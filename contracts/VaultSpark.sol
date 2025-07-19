@@ -90,7 +90,7 @@ contract VaultSpark is ReentrancyGuard, Ownable {
         address _tokenIn,
         address _tokenOut,
         uint256 _amountIn
-    ) external nonReentrant {
+    ) external payable nonReentrant {
         require(supportedTokens[_tokenIn] || _tokenIn == address(0), "Input token not supported");
         require(supportedTokens[_tokenOut] || _tokenOut == address(0), "Output token not supported");
         require(_amountIn > 0, "Amount must be greater than 0");
