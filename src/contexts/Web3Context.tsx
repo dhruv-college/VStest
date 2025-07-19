@@ -18,15 +18,15 @@ const Web3Context = createContext<Web3ContextType | undefined>(undefined);
 
 // BlockDAG Network Configuration
 const BLOCKDAG_NETWORK = {
-  chainId: '0x7A69', // 31337 in hex (you'll need to update this with actual BlockDAG chain ID)
-  chainName: 'BlockDAG Testnet',
-  rpcUrls: ['https://rpc-testnet.blockdag.network'], // Update with actual RPC URL
+  chainId: '0x413', // 31337 in hex (you'll need to update this with actual BlockDAG chain ID)
+  chainName: 'Primordial BlockDAG Testnet',
+  rpcUrls: ['https://rpc.primordial.bdagscan.com'], // Update with actual RPC URL
   nativeCurrency: {
     name: 'BDAG',
     symbol: 'BDAG',
     decimals: 18,
   },
-  blockExplorerUrls: ['https://explorer-testnet.blockdag.network'], // Update with actual explorer
+  blockExplorerUrls: ['https://primordial.bdagscan.com'], // Update with actual explorer
 };
 
 export const Web3Provider: React.FC<{ children: ReactNode }> = ({ children }) => {
