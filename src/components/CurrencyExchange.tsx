@@ -1,25 +1,28 @@
-
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUpDown, TrendingUp, TrendingDown } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowUpDown, TrendingUp, TrendingDown } from 'lucide-react';
+import { useVaultSparkContract } from '@/hooks/useVaultSparkContract';
+import WalletConnect from '@/components/WalletConnect';
 
 const CurrencyExchange = () => {
-  const [fromAmount, setFromAmount] = useState("");
-  const [toAmount, setToAmount] = useState("");
-  const [fromToken, setFromToken] = useState("ETH");
-  const [toToken, setToToken] = useState("USDC");
+  const [fromAmount, setFromAmount] = useState('');
+  const [toAmount, setToAmount] = useState('');
+  const [fromToken, setFromToken] = useState('ETH');
+  const [toToken, setToToken] = useState('BDAG');
+  
+  const { swapTokens, calculateSwapAmount, loading, isConnected } = useVaultSparkContract();
 
   const tokens = [
-    { symbol: "ETH", name: "Ethereum", price: 2300, change: 5.2 },
-    { symbol: "BDAG", name: "BlockDAG", price: 0.0178, change: 12.4 },
-    { symbol: "USDC", name: "USD Coin", price: 1.00, change: 0.1 },
-    { symbol: "USDT", name: "Tether", price: 1.00, change: -0.05 },
-    { symbol: "DAI", name: "DAI", price: 1.00, change: 0.2 },
-    { symbol: "WBTC", name: "Wrapped Bitcoin", price: 43500, change: 3.8 },
-    { symbol: "UNI", name: "Uniswap", price: 7.45, change: -2.1 }
+    { symbol: 'ETH', name: 'Ethereum', price: 2300, change: 5.2 },
+    { symbol: 'BDAG', name: 'BlockDAG', price: 0.0178, change: 12.4 },
+    { symbol: 'USDC', name: 'USD Coin', price: 1.00, change: 0.1 },
+    { symbol: 'USDT', name: 'Tether', price: 1.00, change: -0.05 },
+    { symbol: 'DAI', name: 'DAI', price: 1.00, change: 0.2 },
+    { symbol: 'WBTC', name: 'Wrapped Bitcoin', price: 43500, change: 3.8 },
+    { symbol: 'UNI', name: 'Uniswap', price: 7.45, change: -2.1 }
   ];
 
   const handleSwapTokens = () => {
@@ -31,17 +34,39 @@ const CurrencyExchange = () => {
   };
 
   const calculateExchange = (amount: string) => {
-    if (!amount) return "";
+    if (!amount) return '';
     const fromPrice = tokens.find(t => t.symbol === fromToken)?.price || 1;
     const toPrice = tokens.find(t => t.symbol === toToken)?.price || 1;
     const result = (parseFloat(amount) * fromPrice) / toPrice;
     return result.toFixed(6);
   };
 
-  const handleFromAmountChange = (value: string) => {
+  const handleFromAmountChange = async (value: string) => {
     setFromAmount(value);
-    setToAmount(calculateExchange(value));
+    if (value && !isNaN(Number(value)) && isConnected) {
+      const calculatedAmount = await calculateSwapAmount(fromToken, toToken, value);
+      if (calculatedAmount) {
+        setToAmount(calculatedAmount);
+      } else {
+        setToAmount(calculateExchange(value));
+      }
+    } else if (value && !isNaN(Number(value))) {
+      setToAmount(calculateExchange(value));
+    } else {
+      setToAmount('');
+    }
   };
+
+  const handleExecuteSwap = async () => {
+    if (!fromAmount || !isConnected) return;
+    await swapTokens(fromToken, toToken, fromAmount);
+  };
+
+  useEffect(() => {
+    if (fromAmount && fromToken !== toToken) {
+      handleFromAmountChange(fromAmount);
+    }
+  }, [fromToken, toToken]);
 
   return (
     <div className="space-y-6">
@@ -49,6 +74,12 @@ const CurrencyExchange = () => {
         <h2 className="text-3xl font-bold text-white">Token Exchange</h2>
         <p className="text-gray-400">Swap tokens with the best rates across DeFi protocols</p>
       </div>
+
+      {!isConnected && (
+        <div className="max-w-md mx-auto mb-6">
+          <WalletConnect />
+        </div>
+      )}
 
       <div className="max-w-md mx-auto">
         <Card className="bg-gradient-card backdrop-blur-sm border-white/10">
@@ -128,15 +159,19 @@ const CurrencyExchange = () => {
               </div>
             </div>
 
-            <Button className="w-full bg-gradient-defi hover:opacity-90 text-white font-semibold py-3">
-              Swap Tokens
+            <Button 
+              className="w-full bg-gradient-defi hover:opacity-90 text-white font-semibold py-3"
+              onClick={handleExecuteSwap}
+              disabled={!isConnected || !fromAmount || loading}
+            >
+              {loading ? 'Swapping...' : 'Swap Tokens'}
             </Button>
 
             {/* Exchange Info */}
             <div className="space-y-2 pt-4 border-t border-white/10">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Exchange Rate</span>
-                <span className="text-white">1 {fromToken} = {calculateExchange("1")} {toToken}</span>
+                <span className="text-white">1 {fromToken} = {calculateExchange('1')} {toToken}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Network Fee</span>

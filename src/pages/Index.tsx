@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import NFTRewards from "@/components/NFTRewards";
+import ContractInfo from "@/components/ContractInfo";
 import CurrencyExchange from "@/components/CurrencyExchange";
 import BorrowLend from "@/components/BorrowLend";
 import ProfileSection from "@/components/ProfileSection";
@@ -116,7 +116,7 @@ const Index = () => {
             </TabsList>
             
             <TabsContent value="nft-rewards" className="mt-6 animate-fade-in">
-              <NFTRewards />
+              <ContractInfo />
             </TabsContent>
             
             <TabsContent value="exchange" className="mt-6 animate-fade-in">
