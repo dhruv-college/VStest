@@ -93,9 +93,9 @@ const CurrencyExchange = () => {
                 onClick={handleSwapTokens}
                 variant="outline"
                 size="sm"
-                className="rounded-full border-white/20 hover:bg-white/10 text-white"
+                className="rounded-full border-white/20 hover:bg-white/10 text-white bg-black/20"
               >
-                <ArrowUpDown className="h-4 w-4" />
+                <ArrowUpDown className="h-4 w-4 text-white" />
               </Button>
             </div>
 

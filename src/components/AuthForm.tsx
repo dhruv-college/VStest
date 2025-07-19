@@ -142,16 +142,6 @@ const AuthForm = () => {
             </TabsContent>
           </Tabs>
           
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <Button
-              onClick={connectWallet}
-              variant="outline"
-              className="w-full border-white/20 text-white hover:bg-white/10"
-            >
-              <Wallet className="mr-2 h-4 w-4" />
-              Connect MetaMask
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>

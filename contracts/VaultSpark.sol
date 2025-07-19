@@ -72,9 +72,9 @@ contract VaultSpark is ReentrancyGuard, Ownable {
     function setBlockDAGToken(address _blockDAGToken) external onlyOwner {
         blockDAGToken = _blockDAGToken;
         supportedTokens[_blockDAGToken] = true;
-        tokenPrices[_blockDAGToken] = 1e18; // Initial price: 1 ETH
-        lendingRates[_blockDAGToken] = 600; // 6% lending rate
-        borrowingRates[_blockDAGToken] = 900; // 9% borrowing rate
+        tokenPrices[_blockDAGToken] = 178e14; // Initial price: 0.0178 ETH
+        lendingRates[_blockDAGToken] = 1570; // 15.7% lending rate
+        borrowingRates[_blockDAGToken] = 1180; // 11.8% borrowing rate
         emit TokenAdded(_blockDAGToken);
     }
     

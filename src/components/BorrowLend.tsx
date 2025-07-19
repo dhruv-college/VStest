@@ -8,8 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { TrendingUp, Shield, Zap } from "lucide-react";
 
 const BorrowLend = () => {
-  const [borrowAmount, setBorrowAmount] = useState("");
-  const [lendAmount, setLendAmount] = useState("");
+  const [borrowAmounts, setBorrowAmounts] = useState<Record<string, string>>({});
+  const [lendAmounts, setLendAmounts] = useState<Record<string, string>>({});
 
   const lendingPools = [
     {
@@ -135,8 +135,8 @@ const BorrowLend = () => {
                   <div className="space-y-2">
                     <Input
                       placeholder="Amount to lend"
-                      value={lendAmount}
-                      onChange={(e) => setLendAmount(e.target.value)}
+                      value={lendAmounts[pool.token] || ""}
+                      onChange={(e) => setLendAmounts(prev => ({ ...prev, [pool.token]: e.target.value }))}
                       className="bg-black/20 border-white/10 text-white"
                     />
                     <Button className="w-full bg-defi-success hover:bg-defi-success/80 text-white">
@@ -212,8 +212,8 @@ const BorrowLend = () => {
                   <div className="space-y-2">
                     <Input
                       placeholder="Amount to borrow"
-                      value={borrowAmount}
-                      onChange={(e) => setBorrowAmount(e.target.value)}
+                      value={borrowAmounts[option.token] || ""}
+                      onChange={(e) => setBorrowAmounts(prev => ({ ...prev, [option.token]: e.target.value }))}
                       className="bg-black/20 border-white/10 text-white"
                     />
                     <Button className="w-full bg-defi-primary hover:bg-defi-primary/80 text-white">
