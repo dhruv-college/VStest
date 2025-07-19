@@ -88,7 +88,7 @@ const VAULT_SPARK_ABI = [
 ];
 
 // Contract address (update this with your deployed contract address)
-const VAULT_SPARK_ADDRESS = '0x1234567890123456789012345678901234567890'; // Replace with actual deployed address
+const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Replace with actual deployed address
 
 export const useVaultSparkContract = () => {
   const { web3, account, isConnected } = useWeb3();
