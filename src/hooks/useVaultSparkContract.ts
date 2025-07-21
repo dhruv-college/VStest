@@ -88,14 +88,14 @@ const VAULT_SPARK_ABI = [
 ];
 
 // Contract address on BlockDAG testnet
-const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Deploy on BlockDAG testnet
+const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB';
 
-// BlockDAG testnet token addresses
+// BlockDAG testnet token addresses - using zero address for native BDAG
 const TOKEN_ADDRESSES = {
-  BDAG: '0x0000000000000000000000000000000000000000', // Native BDAG token
-  USDT: '0x1234567890123456789012345678901234567890', // Mock USDT on BlockDAG
-  USDC: '0x9876543210987654321098765432109876543210', // Mock USDC on BlockDAG
-  ETH: '0x0000000000000000000000000000000000000001', // ETH equivalent token
+  BDAG: '0x0000000000000000000000000000000000000000', // Native BDAG token (zero address)
+  USDT: '0x1111111111111111111111111111111111111111', // Mock USDT on BlockDAG
+  USDC: '0x2222222222222222222222222222222222222222', // Mock USDC on BlockDAG
+  ETH: '0x3333333333333333333333333333333333333333', // ETH equivalent token
 };
 
 export const useVaultSparkContract = () => {
@@ -133,20 +133,13 @@ export const useVaultSparkContract = () => {
       
       const amountWei = web3.utils.toWei(amountIn, 'ether');
       
-      // Estimate gas
-      const gasEstimate = await contract.methods
-        .swap(tokenInAddress, tokenOutAddress, amountWei)
-        .estimateGas({ 
-          from: account, 
-        value: tokenIn === 'BDAG' ? amountWei : '0'
-        });
-
-      // Execute transaction
+      // Execute transaction with minimal gas and conservative approach
       const tx = await contract.methods
         .swap(tokenInAddress, tokenOutAddress, amountWei)
         .send({ 
           from: account, 
-          gas: String(Math.floor(Number(gasEstimate) * 1.2)),
+          gas: '300000', // Fixed gas limit for BlockDAG
+          gasPrice: '1000000000', // 1 Gwei
           value: tokenIn === 'BDAG' ? amountWei : '0'
         });
 
@@ -179,18 +172,12 @@ export const useVaultSparkContract = () => {
       const tokenAddress = getTokenAddress(token);
       const amountWei = web3.utils.toWei(amount, 'ether');
       
-      const gasEstimate = await contract.methods
-        .lend(tokenAddress, amountWei)
-        .estimateGas({ 
-          from: account, 
-          value: token === 'BDAG' ? amountWei : '0'
-        });
-
       const tx = await contract.methods
         .lend(tokenAddress, amountWei)
         .send({ 
           from: account, 
-          gas: String(Math.floor(Number(gasEstimate) * 1.2)),
+          gas: '300000',
+          gasPrice: '1000000000',
           value: token === 'BDAG' ? amountWei : '0'
         });
 
@@ -231,18 +218,12 @@ export const useVaultSparkContract = () => {
       const borrowAmountWei = web3.utils.toWei(borrowAmount, 'ether');
       const collateralAmountWei = web3.utils.toWei(collateralAmount, 'ether');
       
-      const gasEstimate = await contract.methods
-        .borrow(borrowTokenAddress, collateralTokenAddress, borrowAmountWei, collateralAmountWei)
-        .estimateGas({ 
-          from: account, 
-          value: collateralToken === 'BDAG' ? collateralAmountWei : '0'
-        });
-
       const tx = await contract.methods
         .borrow(borrowTokenAddress, collateralTokenAddress, borrowAmountWei, collateralAmountWei)
         .send({ 
           from: account, 
-          gas: String(Math.floor(Number(gasEstimate) * 1.2)),
+          gas: '400000',
+          gasPrice: '1000000000',
           value: collateralToken === 'BDAG' ? collateralAmountWei : '0'
         });
 
