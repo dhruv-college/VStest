@@ -115,9 +115,24 @@ export const useVaultSparkContract = () => {
     try {
       setLoading(true);
       
-      // Convert addresses (use 0x0 for ETH/BDAG)
-      const tokenInAddress = tokenIn === 'ETH' ? '0x0000000000000000000000000000000000000000' : tokenIn;
-      const tokenOutAddress = tokenOut === 'ETH' ? '0x0000000000000000000000000000000000000000' : tokenOut;
+      // Convert token symbols to addresses
+      const getTokenAddress = (token: string) => {
+        switch (token) {
+          case 'ETH':
+            return '0x0000000000000000000000000000000000000000';
+          case 'BDAG':
+            return '0x0000000000000000000000000000000000000001'; // Placeholder for BDAG token address
+          case 'USDT':
+            return '0xdAC17F958D2ee523a2206206994597C13D831ec7'; // USDT mainnet address
+          case 'USDC':
+            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81'; // USDC mainnet address
+          default:
+            return token; // Assume it's already an address
+        }
+      };
+      
+      const tokenInAddress = getTokenAddress(tokenIn);
+      const tokenOutAddress = getTokenAddress(tokenOut);
       
       const amountWei = web3.utils.toWei(amountIn, 'ether');
       
@@ -160,7 +175,22 @@ export const useVaultSparkContract = () => {
     try {
       setLoading(true);
       
-      const tokenAddress = token === 'ETH' ? '0x0000000000000000000000000000000000000000' : token;
+      const getTokenAddress = (token: string) => {
+        switch (token) {
+          case 'ETH':
+            return '0x0000000000000000000000000000000000000000';
+          case 'BDAG':
+            return '0x0000000000000000000000000000000000000001';
+          case 'USDT':
+            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+          case 'USDC':
+            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
+          default:
+            return token;
+        }
+      };
+      
+      const tokenAddress = getTokenAddress(token);
       const amountWei = web3.utils.toWei(amount, 'ether');
       
       const gasEstimate = await contract.methods
@@ -205,8 +235,23 @@ export const useVaultSparkContract = () => {
     try {
       setLoading(true);
       
-      const borrowTokenAddress = borrowToken === 'ETH' ? '0x0000000000000000000000000000000000000000' : borrowToken;
-      const collateralTokenAddress = collateralToken === 'ETH' ? '0x0000000000000000000000000000000000000000' : collateralToken;
+      const getTokenAddress = (token: string) => {
+        switch (token) {
+          case 'ETH':
+            return '0x0000000000000000000000000000000000000000';
+          case 'BDAG':
+            return '0x0000000000000000000000000000000000000001';
+          case 'USDT':
+            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+          case 'USDC':
+            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
+          default:
+            return token;
+        }
+      };
+      
+      const borrowTokenAddress = getTokenAddress(borrowToken);
+      const collateralTokenAddress = getTokenAddress(collateralToken);
       
       const borrowAmountWei = web3.utils.toWei(borrowAmount, 'ether');
       const collateralAmountWei = web3.utils.toWei(collateralAmount, 'ether');
@@ -245,8 +290,23 @@ export const useVaultSparkContract = () => {
     if (!contract || !web3) return null;
 
     try {
-      const tokenInAddress = tokenIn === 'ETH' ? '0x0000000000000000000000000000000000000000' : tokenIn;
-      const tokenOutAddress = tokenOut === 'ETH' ? '0x0000000000000000000000000000000000000000' : tokenOut;
+      const getTokenAddress = (token: string) => {
+        switch (token) {
+          case 'ETH':
+            return '0x0000000000000000000000000000000000000000';
+          case 'BDAG':
+            return '0x0000000000000000000000000000000000000001';
+          case 'USDT':
+            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+          case 'USDC':
+            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
+          default:
+            return token;
+        }
+      };
+      
+      const tokenInAddress = getTokenAddress(tokenIn);
+      const tokenOutAddress = getTokenAddress(tokenOut);
       const amountWei = web3.utils.toWei(amountIn, 'ether');
       
       const result = await contract.methods

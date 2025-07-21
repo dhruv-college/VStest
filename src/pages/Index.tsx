@@ -10,6 +10,7 @@ import ProfileSection from "@/components/ProfileSection";
 import AdminAnalytics from "@/components/AdminAnalytics";
 import DashboardHeader from "@/components/DashboardHeader";
 import AIInsights from "@/components/AIInsights";
+import NFTRewards from "@/components/NFTRewards";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { LogOut, User, BarChart3 } from "lucide-react";
@@ -116,7 +117,7 @@ const Index = () => {
             </TabsList>
             
             <TabsContent value="nft-rewards" className="mt-6 animate-fade-in">
-              <ContractInfo />
+              <NFTRewards />
             </TabsContent>
             
             <TabsContent value="exchange" className="mt-6 animate-fade-in">
@@ -128,7 +129,10 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="profile" className="mt-6 animate-fade-in">
-              <ProfileSection />
+              <div className="space-y-6">
+                <ProfileSection />
+                <ContractInfo />
+              </div>
             </TabsContent>
             
             {isAdmin && (
