@@ -54,9 +54,31 @@ contract VaultSpark is ReentrancyGuard, Ownable {
     event Repay(address indexed user, address token, uint256 amount);
     
     constructor() Ownable(msg.sender) {
-        // Initialize with some default rates
-        lendingRates[address(0)] = 500; // 5% for ETH
-        borrowingRates[address(0)] = 800; // 8% for ETH
+        // Initialize BlockDAG testnet tokens
+        // BDAG native token (address 0 represents native token)
+        supportedTokens[address(0)] = true;
+        tokenPrices[address(0)] = 178e14; // 0.0178 ETH equivalent
+        lendingRates[address(0)] = 1570; // 15.7% for BDAG
+        borrowingRates[address(0)] = 1180; // 11.8% for BDAG
+        
+        // Mock USDT on BlockDAG testnet
+        address mockUSDT = 0x1234567890123456789012345678901234567890;
+        supportedTokens[mockUSDT] = true;
+        tokenPrices[mockUSDT] = 56179775281e6; // 1 USDT = 56179.775281 BDAG
+        lendingRates[mockUSDT] = 800; // 8% for USDT
+        borrowingRates[mockUSDT] = 1200; // 12% for USDT
+        
+        // Mock USDC on BlockDAG testnet
+        address mockUSDC = 0x9876543210987654321098765432109876543210;
+        supportedTokens[mockUSDC] = true;
+        tokenPrices[mockUSDC] = 56233988764e6; // 1 USDC = 56233.988764 BDAG
+        lendingRates[mockUSDC] = 750; // 7.5% for USDC
+        borrowingRates[mockUSDC] = 1150; // 11.5% for USDC
+        
+        // Initialize liquidity pools with some test liquidity
+        liquidityPools[address(0)] = 1000 ether; // 1000 BDAG
+        liquidityPools[mockUSDT] = 50000 * 1e6; // 50,000 USDT (6 decimals)
+        liquidityPools[mockUSDC] = 50000 * 1e6; // 50,000 USDC (6 decimals)
     }
     
     // Add supported token

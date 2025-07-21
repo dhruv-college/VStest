@@ -87,8 +87,16 @@ const VAULT_SPARK_ABI = [
   }
 ];
 
-// Contract address (update this with your deployed contract address)
-const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Replace with actual deployed address
+// Contract address on BlockDAG testnet
+const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Deploy on BlockDAG testnet
+
+// BlockDAG testnet token addresses
+const TOKEN_ADDRESSES = {
+  BDAG: '0x0000000000000000000000000000000000000000', // Native BDAG token
+  USDT: '0x1234567890123456789012345678901234567890', // Mock USDT on BlockDAG
+  USDC: '0x9876543210987654321098765432109876543210', // Mock USDC on BlockDAG
+  ETH: '0x0000000000000000000000000000000000000001', // ETH equivalent token
+};
 
 export const useVaultSparkContract = () => {
   const { web3, account, isConnected } = useWeb3();
@@ -115,20 +123,9 @@ export const useVaultSparkContract = () => {
     try {
       setLoading(true);
       
-      // Convert token symbols to addresses
+      // Convert token symbols to BlockDAG testnet addresses
       const getTokenAddress = (token: string) => {
-        switch (token) {
-          case 'ETH':
-            return '0x0000000000000000000000000000000000000000';
-          case 'BDAG':
-            return '0x0000000000000000000000000000000000000001'; // Placeholder for BDAG token address
-          case 'USDT':
-            return '0xdAC17F958D2ee523a2206206994597C13D831ec7'; // USDT mainnet address
-          case 'USDC':
-            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81'; // USDC mainnet address
-          default:
-            return token; // Assume it's already an address
-        }
+        return TOKEN_ADDRESSES[token as keyof typeof TOKEN_ADDRESSES] || token;
       };
       
       const tokenInAddress = getTokenAddress(tokenIn);
@@ -141,7 +138,7 @@ export const useVaultSparkContract = () => {
         .swap(tokenInAddress, tokenOutAddress, amountWei)
         .estimateGas({ 
           from: account, 
-          value: tokenIn === 'ETH' ? amountWei : '0' 
+        value: tokenIn === 'BDAG' ? amountWei : '0'
         });
 
       // Execute transaction
@@ -150,7 +147,7 @@ export const useVaultSparkContract = () => {
         .send({ 
           from: account, 
           gas: String(Math.floor(Number(gasEstimate) * 1.2)),
-          value: tokenIn === 'ETH' ? amountWei : '0'
+          value: tokenIn === 'BDAG' ? amountWei : '0'
         });
 
       toast.success(`Swap successful! Transaction: ${tx.transactionHash}`);
@@ -176,18 +173,7 @@ export const useVaultSparkContract = () => {
       setLoading(true);
       
       const getTokenAddress = (token: string) => {
-        switch (token) {
-          case 'ETH':
-            return '0x0000000000000000000000000000000000000000';
-          case 'BDAG':
-            return '0x0000000000000000000000000000000000000001';
-          case 'USDT':
-            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-          case 'USDC':
-            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
-          default:
-            return token;
-        }
+        return TOKEN_ADDRESSES[token as keyof typeof TOKEN_ADDRESSES] || token;
       };
       
       const tokenAddress = getTokenAddress(token);
@@ -197,7 +183,7 @@ export const useVaultSparkContract = () => {
         .lend(tokenAddress, amountWei)
         .estimateGas({ 
           from: account, 
-          value: token === 'ETH' ? amountWei : '0' 
+          value: token === 'BDAG' ? amountWei : '0'
         });
 
       const tx = await contract.methods
@@ -205,7 +191,7 @@ export const useVaultSparkContract = () => {
         .send({ 
           from: account, 
           gas: String(Math.floor(Number(gasEstimate) * 1.2)),
-          value: token === 'ETH' ? amountWei : '0'
+          value: token === 'BDAG' ? amountWei : '0'
         });
 
       toast.success(`Lending successful! Transaction: ${tx.transactionHash}`);
@@ -236,18 +222,7 @@ export const useVaultSparkContract = () => {
       setLoading(true);
       
       const getTokenAddress = (token: string) => {
-        switch (token) {
-          case 'ETH':
-            return '0x0000000000000000000000000000000000000000';
-          case 'BDAG':
-            return '0x0000000000000000000000000000000000000001';
-          case 'USDT':
-            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-          case 'USDC':
-            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
-          default:
-            return token;
-        }
+        return TOKEN_ADDRESSES[token as keyof typeof TOKEN_ADDRESSES] || token;
       };
       
       const borrowTokenAddress = getTokenAddress(borrowToken);
@@ -260,7 +235,7 @@ export const useVaultSparkContract = () => {
         .borrow(borrowTokenAddress, collateralTokenAddress, borrowAmountWei, collateralAmountWei)
         .estimateGas({ 
           from: account, 
-          value: collateralToken === 'ETH' ? collateralAmountWei : '0' 
+          value: collateralToken === 'BDAG' ? collateralAmountWei : '0'
         });
 
       const tx = await contract.methods
@@ -268,7 +243,7 @@ export const useVaultSparkContract = () => {
         .send({ 
           from: account, 
           gas: String(Math.floor(Number(gasEstimate) * 1.2)),
-          value: collateralToken === 'ETH' ? collateralAmountWei : '0'
+          value: collateralToken === 'BDAG' ? collateralAmountWei : '0'
         });
 
       toast.success(`Borrowing successful! Transaction: ${tx.transactionHash}`);
@@ -291,18 +266,7 @@ export const useVaultSparkContract = () => {
 
     try {
       const getTokenAddress = (token: string) => {
-        switch (token) {
-          case 'ETH':
-            return '0x0000000000000000000000000000000000000000';
-          case 'BDAG':
-            return '0x0000000000000000000000000000000000000001';
-          case 'USDT':
-            return '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-          case 'USDC':
-            return '0xA0b86a33E6417fAD5f6040c0a3F96F84E60e1b81';
-          default:
-            return token;
-        }
+        return TOKEN_ADDRESSES[token as keyof typeof TOKEN_ADDRESSES] || token;
       };
       
       const tokenInAddress = getTokenAddress(tokenIn);
