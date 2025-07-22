@@ -5,7 +5,7 @@ import { ExternalLink, Code, Shield } from 'lucide-react';
 
 const ContractInfo: React.FC = () => {
   // Update these with your actual deployed contract details
-  const contractAddress = '0x1234567890123456789012345678901234567890'; // Replace with actual address
+  const contractAddress = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Replace with actual address
   const explorerUrl = 'https://explorer-testnet.blockdag.network'; // Update with actual BlockDAG explorer
 
   return (
