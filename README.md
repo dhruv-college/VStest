@@ -60,12 +60,15 @@ npm install
 # Start the development server
 npm run dev
 ``` 
-### SDG Algnments
+## SDG Algnments
 
-# SDG 8: Decent Work and Economic Growth
-# SDG 9: Industry, Innovation, and Infrastructure
-# SDG 10: Reduced Inequalities
-# SDG 17: Partnerships for the Goals
+- SDG 8: Decent Work and Economic Growth
+
+- SDG 9: Industry, Innovation, and Infrastructure
+
+- SDG 10: Reduced Inequalities
+
+- SDG 17: Partnerships for the Goals
 
 ### Screenshots
 
