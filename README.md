@@ -60,7 +60,7 @@ npm install
 # Start the development server
 npm run dev
 ``` 
-## SDG Alignments
+## SDG Goals
 
 - SDG 8: Decent Work and Economic Growth
 
