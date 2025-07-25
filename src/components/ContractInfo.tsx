@@ -5,8 +5,8 @@ import { ExternalLink, Code, Shield } from 'lucide-react';
 
 const ContractInfo: React.FC = () => {
   // Update these with your actual deployed contract details
-  const contractAddress = '0x1234567890123456789012345678901234567890'; // Replace with actual address
-  const explorerUrl = 'https://explorer-testnet.blockdag.network'; // Update with actual BlockDAG explorer
+  const contractAddress = '0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07'; // Replace with actual address
+  const explorerUrl = 'https://primordial.bdagscan.com/contractOverview/0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07'; // Update with actual BlockDAG explorer
 
   return (
     <Card className="w-full max-w-2xl mx-auto border-primary/20 bg-gradient-to-br from-background to-secondary/20">
