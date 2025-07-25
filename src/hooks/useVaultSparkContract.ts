@@ -4,20 +4,13 @@ import { toast } from 'sonner';
 import { Contract } from 'web3-eth-contract';
 import { AbiItem } from 'web3-utils';
 
-// VaultSpark Contract ABI (simplified for key functions)
+// VaultSpark Contract ABI
 const VAULT_SPARK_ABI = [
   {
-    "inputs": [{"internalType": "address", "name": "_token", "type": "address"}],
-    "name": "addSupportedToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
-      {"internalType": "address", "name": "_tokenIn", "type": "address"},
-      {"internalType": "address", "name": "_tokenOut", "type": "address"},
-      {"internalType": "uint256", "name": "_amountIn", "type": "uint256"}
+      {"internalType": "address", "name": "tokenIn", "type": "address"},
+      {"internalType": "address", "name": "tokenOut", "type": "address"},
+      {"internalType": "uint256", "name": "amountIn", "type": "uint256"}
     ],
     "name": "swap",
     "outputs": [],
@@ -26,8 +19,8 @@ const VAULT_SPARK_ABI = [
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_token", "type": "address"},
-      {"internalType": "uint256", "name": "_amount", "type": "uint256"}
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"}
     ],
     "name": "lend",
     "outputs": [],
@@ -36,10 +29,10 @@ const VAULT_SPARK_ABI = [
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_borrowToken", "type": "address"},
-      {"internalType": "address", "name": "_collateralToken", "type": "address"},
-      {"internalType": "uint256", "name": "_borrowAmount", "type": "uint256"},
-      {"internalType": "uint256", "name": "_collateralAmount", "type": "uint256"}
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "address", "name": "collateralToken", "type": "address"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"},
+      {"internalType": "uint256", "name": "collateral", "type": "uint256"}
     ],
     "name": "borrow",
     "outputs": [],
@@ -47,24 +40,24 @@ const VAULT_SPARK_ABI = [
     "type": "function"
   },
   {
-    "inputs": [{"internalType": "uint256", "name": "_positionIndex", "type": "uint256"}],
-    "name": "withdrawLending",
+    "inputs": [{"internalType": "uint256", "name": "index", "type": "uint256"}],
+    "name": "withdraw",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [{"internalType": "uint256", "name": "_positionIndex", "type": "uint256"}],
-    "name": "repayBorrow",
+    "inputs": [{"internalType": "uint256", "name": "index", "type": "uint256"}],
+    "name": "repay",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_tokenIn", "type": "address"},
-      {"internalType": "address", "name": "_tokenOut", "type": "address"},
-      {"internalType": "uint256", "name": "_amountIn", "type": "uint256"}
+      {"internalType": "address", "name": "tokenIn", "type": "address"},
+      {"internalType": "address", "name": "tokenOut", "type": "address"},
+      {"internalType": "uint256", "name": "amountIn", "type": "uint256"}
     ],
     "name": "calculateSwapAmount",
     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
@@ -72,16 +65,40 @@ const VAULT_SPARK_ABI = [
     "type": "function"
   },
   {
-    "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-    "name": "getUserLendingPositions",
-    "outputs": [],
+    "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+    "name": "getUserLendPositions",
+    "outputs": [
+      {
+        "components": [
+          {"internalType": "uint256", "name": "amount", "type": "uint256"},
+          {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
+          {"internalType": "address", "name": "token", "type": "address"}
+        ],
+        "internalType": "struct VaultSpark.LendPosition[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-    "name": "getUserBorrowingPositions",
-    "outputs": [],
+    "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+    "name": "getUserBorrowPositions",
+    "outputs": [
+      {
+        "components": [
+          {"internalType": "uint256", "name": "amount", "type": "uint256"},
+          {"internalType": "uint256", "name": "collateral", "type": "uint256"},
+          {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
+          {"internalType": "address", "name": "token", "type": "address"},
+          {"internalType": "address", "name": "collateralToken", "type": "address"}
+        ],
+        "internalType": "struct VaultSpark.BorrowPosition[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   }
@@ -237,6 +254,69 @@ export const useVaultSparkContract = () => {
     }
   }, [account, web3, getContract]);
 
+  const withdrawLending = useCallback(async (index: number) => {
+    if (!account || !web3) {
+      toast.error('Please connect your wallet first');
+      return;
+    }
+
+    const contract = getContract();
+    if (!contract) return;
+
+    try {
+      setLoading(true);
+      
+      const tx = await contract.methods
+        .withdraw(index)
+        .send({ 
+          from: account, 
+          gas: '300000',
+          gasPrice: '1000000000'
+        });
+
+      toast.success(`Withdrawal successful! Transaction: ${tx.transactionHash}`);
+      return tx;
+    } catch (error: any) {
+      console.error('Withdrawal error:', error);
+      toast.error(`Withdrawal failed: ${error.message || 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [account, web3, getContract]);
+
+  const repayBorrow = useCallback(async (index: number, repayAmount: string) => {
+    if (!account || !web3) {
+      toast.error('Please connect your wallet first');
+      return;
+    }
+
+    const contract = getContract();
+    if (!contract) return;
+
+    try {
+      setLoading(true);
+      
+      const repayAmountWei = web3.utils.toWei(repayAmount, 'ether');
+      
+      const tx = await contract.methods
+        .repay(index)
+        .send({ 
+          from: account, 
+          gas: '400000',
+          gasPrice: '1000000000',
+          value: repayAmountWei // Assuming repayment is in BDAG for simplicity
+        });
+
+      toast.success(`Repayment successful! Transaction: ${tx.transactionHash}`);
+      return tx;
+    } catch (error: any) {
+      console.error('Repayment error:', error);
+      toast.error(`Repayment failed: ${error.message || 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [account, web3, getContract]);
+
   const calculateSwapAmount = useCallback(async (
     tokenIn: string,
     tokenOut: string,
@@ -269,6 +349,8 @@ export const useVaultSparkContract = () => {
     swapTokens,
     lendTokens,
     borrowTokens,
+    withdrawLending,
+    repayBorrow,
     calculateSwapAmount,
     loading,
     isConnected,
