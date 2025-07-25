@@ -105,7 +105,7 @@ const VAULT_SPARK_ABI = [
 ];
 
 // Contract address on BlockDAG testnet
-const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB';
+const VAULT_SPARK_ADDRESS = '0xb0d4afd8879ed9f52b28595d31b441d079b2ca07';
 
 // BlockDAG testnet token addresses - using zero address for native BDAG
 const TOKEN_ADDRESSES = {
