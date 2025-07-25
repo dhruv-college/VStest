@@ -121,7 +121,12 @@ export const useVaultSparkContract = () => {
 
   const getContract = useCallback((): Contract<AbiItem[]> | null => {
     if (!web3 || !isConnected) return null;
-    return new web3.eth.Contract(VAULT_SPARK_ABI as AbiItem[], VAULT_SPARK_ADDRESS);
+    try {
+      return new web3.eth.Contract(VAULT_SPARK_ABI as AbiItem[], VAULT_SPARK_ADDRESS);
+    } catch (error) {
+      console.error('Failed to create contract instance:', error);
+      return null;
+    }
   }, [web3, isConnected]);
 
   const swapTokens = useCallback(async (
@@ -135,7 +140,10 @@ export const useVaultSparkContract = () => {
     }
 
     const contract = getContract();
-    if (!contract) return;
+    if (!contract) {
+      toast.error('Failed to initialize contract');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -148,7 +156,23 @@ export const useVaultSparkContract = () => {
       const tokenInAddress = getTokenAddress(tokenIn);
       const tokenOutAddress = getTokenAddress(tokenOut);
       
+      console.log('Swap parameters:', {
+        tokenInAddress,
+        tokenOutAddress,
+        amountIn,
+        account
+      });
+      
       const amountWei = web3.utils.toWei(amountIn, 'ether');
+      
+      // Check if contract exists by calling a view function first
+      try {
+        await contract.methods.calculateSwapAmount(tokenInAddress, tokenOutAddress, amountWei).call();
+      } catch (viewError) {
+        console.error('Contract view call failed:', viewError);
+        toast.error('Contract not available on this network. Please check if it\'s deployed on BlockDAG testnet.');
+        return;
+      }
       
       // Execute transaction with minimal gas and conservative approach
       const tx = await contract.methods
@@ -164,7 +188,15 @@ export const useVaultSparkContract = () => {
       return tx;
     } catch (error: any) {
       console.error('Swap error:', error);
-      toast.error(`Swap failed: ${error.message || 'Unknown error'}`);
+      
+      // Better error messaging
+      if (error.message.includes('revert')) {
+        toast.error('Transaction failed: Contract requirements not met (insufficient liquidity, invalid tokens, or contract not deployed)');
+      } else if (error.message.includes('gas')) {
+        toast.error('Transaction failed: Insufficient gas or gas limit too low');
+      } else {
+        toast.error(`Swap failed: ${error.message || 'Unknown error'}`);
+      }
     } finally {
       setLoading(false);
     }
