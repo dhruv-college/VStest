@@ -28,7 +28,7 @@ const ContractInfo: React.FC = () => {
             </p>
           </div>
           <a 
-            href={`${explorerUrl}/address/${contractAddress}`}
+            href={`${explorerUrl}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-primary/80"
