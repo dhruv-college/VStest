@@ -6,6 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+<<<<<<< HEAD
+=======
+import { useWeb3 } from '@/contexts/Web3Context';
+>>>>>>> temp-private
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { User, Wallet, Copy, CheckCircle } from 'lucide-react';
@@ -28,7 +32,12 @@ interface Transaction {
 }
 
 const ProfileSection = () => {
+<<<<<<< HEAD
   const { user, walletAddress, connectWallet, isConnected } = useAuth();
+=======
+  const { user } = useAuth();
+  const { account: walletAddress, connectWallet, isConnected } = useWeb3();
+>>>>>>> temp-private
   const [profile, setProfile] = useState<Profile>({ username: '', wallet_address: '', avatar_url: '' });
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);

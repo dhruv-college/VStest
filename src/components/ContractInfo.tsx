@@ -5,8 +5,13 @@ import { ExternalLink, Code, Shield } from 'lucide-react';
 
 const ContractInfo: React.FC = () => {
   // Update these with your actual deployed contract details
+<<<<<<< HEAD
   const contractAddress = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'; // Replace with actual address
   const explorerUrl = 'https://primordial.bdagscan.com/contractOverview/0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB?chain=EVM'; // Update with actual BlockDAG explorer
+=======
+  const contractAddress = '0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07'; // Replace with actual address
+  const explorerUrl = 'https://primordial.bdagscan.com/contractOverview/0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07?chain=EVM'; // Update with actual BlockDAG explorer
+>>>>>>> temp-private
 
   return (
     <Card className="w-full max-w-2xl mx-auto border-primary/20 bg-gradient-to-br from-background to-secondary/20">
@@ -28,7 +33,11 @@ const ContractInfo: React.FC = () => {
             </p>
           </div>
           <a 
+<<<<<<< HEAD
             href={`${explorerUrl}/address/${contractAddress}`}
+=======
+            href={`${explorerUrl}`}
+>>>>>>> temp-private
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-primary/80"
