@@ -13,11 +13,7 @@ const DashboardHeader = () => {
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-3">
           <img 
-<<<<<<< HEAD
-            src="/uploads/7b92f9dd-0a94-474f-b504-b3d12723ef7b.png" 
-=======
             src="/lovable-uploads/7b92f9dd-0a94-474f-b504-b3d12723ef7b.png" 
->>>>>>> temp-private
             alt="VaultSpark Logo" 
             className="h-12 w-12"
           />
