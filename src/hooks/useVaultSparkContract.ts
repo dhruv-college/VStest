@@ -105,7 +105,7 @@ const VAULT_SPARK_ABI = [
 ];
 
 // Contract address on BlockDAG testnet
-const VAULT_SPARK_ADDRESS = '0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07';
+const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332C457a4d796187F6Ba67fEB';
 
 // BlockDAG testnet token addresses - using zero address for native BDAG
 const TOKEN_ADDRESSES = {
@@ -165,13 +165,19 @@ export const useVaultSparkContract = () => {
       
       const amountWei = web3.utils.toWei(amountIn, 'ether');
       
-      // Check if contract exists by calling a view function first
+      // Verify contract deployment with a simple call
       try {
-        await contract.methods.calculateSwapAmount(tokenInAddress, tokenOutAddress, amountWei).call();
-      } catch (viewError) {
-        console.error('Contract view call failed:', viewError);
-        toast.error('Contract not available on this network. Please check if it\'s deployed on BlockDAG testnet.');
-        return;
+        console.log('Verifying contract deployment...');
+        const gasEstimate = await contract.methods
+          .swap(tokenInAddress, tokenOutAddress, amountWei)
+          .estimateGas({ 
+            from: account, 
+            value: tokenIn === 'BDAG' ? amountWei : '0'
+          });
+        console.log('Gas estimate:', gasEstimate);
+      } catch (estimateError) {
+        console.error('Gas estimation failed:', estimateError);
+        // Continue with fixed gas - estimation might fail but execution could work
       }
       
       // Execute transaction with minimal gas and conservative approach

@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { useVaultSparkContract } from '@/hooks/useVaultSparkContract';
 import { ArrowDownUp, Coins, TrendingUp, Shield, DollarSign } from 'lucide-react';
+import WalletConnect from '@/components/WalletConnect';
 
 const tokens = [
   { symbol: 'BDAG', name: 'BlockDAG', icon: '💎', apy: '10.0%' },
@@ -57,132 +57,63 @@ const BorrowLend = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
+    <div className="space-y-6">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold gradient-text">Lend & Borrow</h2>
-        <p className="text-muted-foreground">Earn yield by lending or borrow with collateral</p>
+        <h2 className="text-3xl font-bold text-white">Borrow & Lend</h2>
+        <p className="text-gray-400">Earn interest by lending or borrow against your collateral</p>
       </div>
 
-      <Tabs defaultValue="lend" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="lend" className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" />
-            Lend
-          </TabsTrigger>
-          <TabsTrigger value="borrow" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            Borrow
-          </TabsTrigger>
-        </TabsList>
+      {!isConnected && (
+        <div className="max-w-md mx-auto mb-6">
+          <WalletConnect />
+        </div>
+      )}
 
-        <TabsContent value="lend" className="space-y-4">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Coins className="h-5 w-5 text-primary" />
-                Lend Tokens
-              </CardTitle>
-              <CardDescription>
-                Provide liquidity and earn interest on your tokens
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Select Token</label>
-                <Select value={lendToken} onValueChange={setLendToken}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <span>{getTokenIcon(lendToken)}</span>
-                        <span>{lendToken}</span>
-                        <Badge variant="secondary" className="ml-auto">
-                          {getTokenAPY(lendToken)} APY
-                        </Badge>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tokens.map((token) => (
-                      <SelectItem key={token.symbol} value={token.symbol}>
-                        <div className="flex items-center gap-2">
-                          <span>{token.icon}</span>
-                          <span>{token.symbol}</span>
-                          <Badge variant="secondary" className="ml-auto">
-                            {token.apy} APY
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+      <div className="max-w-md mx-auto">
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Amount</label>
-                <Input
-                  type="number"
-                  placeholder="0.0"
-                  value={lendAmount}
-                  onChange={(e) => setLendAmount(e.target.value)}
-                  className="text-lg"
-                />
-              </div>
+        <Tabs defaultValue="lend" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 bg-black/20 backdrop-blur-sm border border-white/10">
+            <TabsTrigger 
+              value="lend" 
+              className="data-[state=active]:bg-gradient-defi data-[state=active]:text-white text-gray-300"
+            >
+              💰 Lend
+            </TabsTrigger>
+            <TabsTrigger 
+              value="borrow" 
+              className="data-[state=active]:bg-gradient-defi data-[state=active]:text-white text-gray-300"
+            >
+              🏦 Borrow
+            </TabsTrigger>
+          </TabsList>
 
-              <div className="glass-card p-3 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">APY</span>
-                  <span className="text-green-400 font-medium">{getTokenAPY(lendToken)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Est. Daily Earnings</span>
-                  <span className="font-medium">
-                    {lendAmount ? (parseFloat(lendAmount) * 0.1 / 365).toFixed(6) : '0'} {lendToken}
-                  </span>
-                </div>
-              </div>
-
-              <Button 
-                onClick={handleLend}
-                disabled={!isConnected || loading || !lendAmount}
-                className="w-full"
-                size="lg"
-              >
-                {loading ? 'Processing...' : `Lend ${lendToken}`}
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="borrow" className="space-y-4">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-primary" />
-                Borrow Tokens
-              </CardTitle>
-              <CardDescription>
-                Borrow tokens using your assets as collateral (150% ratio required)
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+          <TabsContent value="lend" className="mt-4">
+            <Card className="bg-gradient-card backdrop-blur-sm border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Lend Tokens
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Earn competitive APY by lending your tokens
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Borrow Token</label>
-                  <Select value={borrowToken} onValueChange={setBorrowToken}>
-                    <SelectTrigger>
-                      <SelectValue>
-                        <div className="flex items-center gap-2">
-                          <span>{getTokenIcon(borrowToken)}</span>
-                          <span>{borrowToken}</span>
-                        </div>
-                      </SelectValue>
+                  <label className="text-sm text-white">Select Token</label>
+                  <Select value={lendToken} onValueChange={setLendToken}>
+                    <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                      <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-gray-900 border-white/10">
                       {tokens.map((token) => (
-                        <SelectItem key={token.symbol} value={token.symbol}>
+                        <SelectItem key={token.symbol} value={token.symbol} className="text-white focus:bg-white/10">
                           <div className="flex items-center gap-2">
                             <span>{token.icon}</span>
                             <span>{token.symbol}</span>
+                            <Badge variant="secondary" className="ml-auto">
+                              {token.apy} APY
+                            </Badge>
                           </div>
                         </SelectItem>
                       ))}
@@ -191,106 +122,169 @@ const BorrowLend = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Collateral Token</label>
-                  <Select value={collateralToken} onValueChange={setCollateralToken}>
-                    <SelectTrigger>
-                      <SelectValue>
-                        <div className="flex items-center gap-2">
-                          <span>{getTokenIcon(collateralToken)}</span>
-                          <span>{collateralToken}</span>
-                        </div>
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {tokens.map((token) => (
-                        <SelectItem key={token.symbol} value={token.symbol}>
-                          <div className="flex items-center gap-2">
-                            <span>{token.icon}</span>
-                            <span>{token.symbol}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <label className="text-sm text-white">Amount</label>
+                  <Input
+                    type="number"
+                    placeholder="0.0"
+                    value={lendAmount}
+                    onChange={(e) => setLendAmount(e.target.value)}
+                    className="bg-black/20 border-white/10 text-white text-right text-lg"
+                  />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Borrow Amount</label>
-                <Input
-                  type="number"
-                  placeholder="0.0"
-                  value={borrowAmount}
-                  onChange={(e) => {
-                    setBorrowAmount(e.target.value);
-                    setCollateralAmount(calculateCollateralNeeded(e.target.value));
-                  }}
-                  className="text-lg"
-                />
-              </div>
+                {lendAmount && (
+                  <div className="p-3 bg-black/20 rounded-lg space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">APY</span>
+                      <span className="text-green-400">{getTokenAPY(lendToken)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Daily Earnings</span>
+                      <span className="text-green-400">
+                        +{lendAmount ? ((parseFloat(lendAmount) * parseFloat(getTokenAPY(lendToken))) / 100 / 365).toFixed(6) : '0'} {lendToken}
+                      </span>
+                    </div>
+                  </div>
+                )}
 
-              <div className="flex items-center justify-center py-2">
-                <ArrowDownUp className="h-4 w-4 text-muted-foreground" />
-              </div>
+                <Button 
+                  className="w-full bg-gradient-defi hover:opacity-90 text-white font-semibold py-3"
+                  onClick={handleLend}
+                  disabled={!isConnected || !lendAmount || loading}
+                >
+                  {loading ? 'Processing...' : `Lend ${lendToken}`}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Collateral Required (150%)</label>
-                <Input
-                  type="number"
-                  placeholder="0.0"
-                  value={collateralAmount}
-                  onChange={(e) => setCollateralAmount(e.target.value)}
-                  className="text-lg"
-                />
-              </div>
+          <TabsContent value="borrow" className="mt-4">
+            <Card className="bg-gradient-card backdrop-blur-sm border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Borrow Tokens
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Borrow against your collateral with competitive rates
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm text-white">Borrow Token</label>
+                    <Select value={borrowToken} onValueChange={setBorrowToken}>
+                      <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-white/10">
+                        {tokens.map((token) => (
+                          <SelectItem key={token.symbol} value={token.symbol} className="text-white focus:bg-white/10">
+                            <div className="flex items-center gap-2">
+                              <span>{token.icon}</span>
+                              <span>{token.symbol}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-              <div className="glass-card p-3 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Collateralization Ratio</span>
-                  <span className="text-blue-400 font-medium">150%</span>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white">Collateral Token</label>
+                    <Select value={collateralToken} onValueChange={setCollateralToken}>
+                      <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-white/10">
+                        {tokens.map((token) => (
+                          <SelectItem key={token.symbol} value={token.symbol} className="text-white focus:bg-white/10">
+                            <div className="flex items-center gap-2">
+                              <span>{token.icon}</span>
+                              <span>{token.symbol}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Liquidation Risk</span>
-                  <span className="text-yellow-400 font-medium">Medium</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Interest Rate</span>
-                  <span className="text-red-400 font-medium">12% APR</span>
-                </div>
-              </div>
 
-              <Button 
-                onClick={handleBorrow}
-                disabled={!isConnected || loading || !borrowAmount || !collateralAmount}
-                className="w-full"
-                size="lg"
-              >
-                {loading ? 'Processing...' : `Borrow ${borrowToken}`}
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                <div className="space-y-2">
+                  <label className="text-sm text-white">Borrow Amount</label>
+                  <Input
+                    type="number"
+                    placeholder="0.0"
+                    value={borrowAmount}
+                    onChange={(e) => {
+                      setBorrowAmount(e.target.value);
+                      setCollateralAmount(calculateCollateralNeeded(e.target.value));
+                    }}
+                    className="bg-black/20 border-white/10 text-white text-right text-lg"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm text-white">Required Collateral</label>
+                  <Input
+                    type="number"
+                    placeholder="0.0"
+                    value={collateralAmount}
+                    className="bg-black/20 border-white/10 text-white text-right text-lg"
+                    readOnly
+                  />
+                </div>
+
+                {borrowAmount && collateralAmount && (
+                  <div className="p-3 bg-black/20 rounded-lg space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Collateralization Ratio</span>
+                      <span className="text-white">150%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Liquidation Risk</span>
+                      <Badge variant="secondary" className="text-green-400">
+                        Low
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Interest Rate</span>
+                      <span className="text-yellow-400">12% APR</span>
+                    </div>
+                  </div>
+                )}
+
+                <Button 
+                  className="w-full bg-gradient-defi hover:opacity-90 text-white font-semibold py-3"
+                  onClick={handleBorrow}
+                  disabled={!isConnected || !borrowAmount || !collateralAmount || loading}
+                >
+                  {loading ? 'Processing...' : `Borrow ${borrowToken}`}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <Card className="glass-card">
-          <CardContent className="p-4">
+      <Card className="bg-gradient-card backdrop-blur-sm border-white/10">
+        <CardHeader>
+          <CardTitle className="text-white text-center">Portfolio Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
             <div className="text-center space-y-1">
-              <p className="text-sm text-muted-foreground">Total Lent</p>
-              <p className="text-xl font-bold gradient-text">$0.00</p>
+              <p className="text-sm text-gray-400">Total Lent</p>
+              <p className="text-2xl font-bold text-green-400">$0.00</p>
             </div>
-          </CardContent>
-        </Card>
-        <Card className="glass-card">
-          <CardContent className="p-4">
             <div className="text-center space-y-1">
-              <p className="text-sm text-muted-foreground">Total Borrowed</p>
-              <p className="text-xl font-bold gradient-text">$0.00</p>
+              <p className="text-sm text-gray-400">Total Borrowed</p>
+              <p className="text-2xl font-bold text-blue-400">$0.00</p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
