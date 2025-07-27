@@ -4,22 +4,6 @@ import { toast } from 'sonner';
 import { Contract } from 'web3-eth-contract';
 import { AbiItem } from 'web3-utils';
 
-<<<<<<< HEAD
-// VaultSpark Contract ABI (simplified for key functions)
-const VAULT_SPARK_ABI = [
-  {
-    "inputs": [{"internalType": "address", "name": "_token", "type": "address"}],
-    "name": "addSupportedToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {"internalType": "address", "name": "_tokenIn", "type": "address"},
-      {"internalType": "address", "name": "_tokenOut", "type": "address"},
-      {"internalType": "uint256", "name": "_amountIn", "type": "uint256"}
-=======
 // VaultSpark Contract ABI
 const VAULT_SPARK_ABI = [
   {
@@ -27,7 +11,6 @@ const VAULT_SPARK_ABI = [
       {"internalType": "address", "name": "tokenIn", "type": "address"},
       {"internalType": "address", "name": "tokenOut", "type": "address"},
       {"internalType": "uint256", "name": "amountIn", "type": "uint256"}
->>>>>>> temp-private
     ],
     "name": "swap",
     "outputs": [],
@@ -36,13 +19,8 @@ const VAULT_SPARK_ABI = [
   },
   {
     "inputs": [
-<<<<<<< HEAD
-      {"internalType": "address", "name": "_token", "type": "address"},
-      {"internalType": "uint256", "name": "_amount", "type": "uint256"}
-=======
       {"internalType": "address", "name": "token", "type": "address"},
       {"internalType": "uint256", "name": "amount", "type": "uint256"}
->>>>>>> temp-private
     ],
     "name": "lend",
     "outputs": [],
@@ -51,17 +29,10 @@ const VAULT_SPARK_ABI = [
   },
   {
     "inputs": [
-<<<<<<< HEAD
-      {"internalType": "address", "name": "_borrowToken", "type": "address"},
-      {"internalType": "address", "name": "_collateralToken", "type": "address"},
-      {"internalType": "uint256", "name": "_borrowAmount", "type": "uint256"},
-      {"internalType": "uint256", "name": "_collateralAmount", "type": "uint256"}
-=======
       {"internalType": "address", "name": "token", "type": "address"},
       {"internalType": "address", "name": "collateralToken", "type": "address"},
       {"internalType": "uint256", "name": "amount", "type": "uint256"},
       {"internalType": "uint256", "name": "collateral", "type": "uint256"}
->>>>>>> temp-private
     ],
     "name": "borrow",
     "outputs": [],
@@ -69,40 +40,24 @@ const VAULT_SPARK_ABI = [
     "type": "function"
   },
   {
-<<<<<<< HEAD
-    "inputs": [{"internalType": "uint256", "name": "_positionIndex", "type": "uint256"}],
-    "name": "withdrawLending",
-=======
     "inputs": [{"internalType": "uint256", "name": "index", "type": "uint256"}],
     "name": "withdraw",
->>>>>>> temp-private
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-<<<<<<< HEAD
-    "inputs": [{"internalType": "uint256", "name": "_positionIndex", "type": "uint256"}],
-    "name": "repayBorrow",
-=======
     "inputs": [{"internalType": "uint256", "name": "index", "type": "uint256"}],
     "name": "repay",
->>>>>>> temp-private
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-<<<<<<< HEAD
-      {"internalType": "address", "name": "_tokenIn", "type": "address"},
-      {"internalType": "address", "name": "_tokenOut", "type": "address"},
-      {"internalType": "uint256", "name": "_amountIn", "type": "uint256"}
-=======
       {"internalType": "address", "name": "tokenIn", "type": "address"},
       {"internalType": "address", "name": "tokenOut", "type": "address"},
       {"internalType": "uint256", "name": "amountIn", "type": "uint256"}
->>>>>>> temp-private
     ],
     "name": "calculateSwapAmount",
     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
@@ -110,11 +65,6 @@ const VAULT_SPARK_ABI = [
     "type": "function"
   },
   {
-<<<<<<< HEAD
-    "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-    "name": "getUserLendingPositions",
-    "outputs": [],
-=======
     "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
     "name": "getUserLendPositions",
     "outputs": [
@@ -129,16 +79,10 @@ const VAULT_SPARK_ABI = [
         "type": "tuple[]"
       }
     ],
->>>>>>> temp-private
     "stateMutability": "view",
     "type": "function"
   },
   {
-<<<<<<< HEAD
-    "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-    "name": "getUserBorrowingPositions",
-    "outputs": [],
-=======
     "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
     "name": "getUserBorrowPositions",
     "outputs": [
@@ -155,18 +99,13 @@ const VAULT_SPARK_ABI = [
         "type": "tuple[]"
       }
     ],
->>>>>>> temp-private
     "stateMutability": "view",
     "type": "function"
   }
 ];
 
 // Contract address on BlockDAG testnet
-<<<<<<< HEAD
-const VAULT_SPARK_ADDRESS = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB';
-=======
 const VAULT_SPARK_ADDRESS = '0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07';
->>>>>>> temp-private
 
 // BlockDAG testnet token addresses - using zero address for native BDAG
 const TOKEN_ADDRESSES = {
@@ -182,16 +121,12 @@ export const useVaultSparkContract = () => {
 
   const getContract = useCallback((): Contract<AbiItem[]> | null => {
     if (!web3 || !isConnected) return null;
-<<<<<<< HEAD
-    return new web3.eth.Contract(VAULT_SPARK_ABI as AbiItem[], VAULT_SPARK_ADDRESS);
-=======
     try {
       return new web3.eth.Contract(VAULT_SPARK_ABI as AbiItem[], VAULT_SPARK_ADDRESS);
     } catch (error) {
       console.error('Failed to create contract instance:', error);
       return null;
     }
->>>>>>> temp-private
   }, [web3, isConnected]);
 
   const swapTokens = useCallback(async (
@@ -205,14 +140,10 @@ export const useVaultSparkContract = () => {
     }
 
     const contract = getContract();
-<<<<<<< HEAD
-    if (!contract) return;
-=======
     if (!contract) {
       toast.error('Failed to initialize contract');
       return;
     }
->>>>>>> temp-private
 
     try {
       setLoading(true);
@@ -225,10 +156,6 @@ export const useVaultSparkContract = () => {
       const tokenInAddress = getTokenAddress(tokenIn);
       const tokenOutAddress = getTokenAddress(tokenOut);
       
-<<<<<<< HEAD
-      const amountWei = web3.utils.toWei(amountIn, 'ether');
-      
-=======
       console.log('Swap parameters:', {
         tokenInAddress,
         tokenOutAddress,
@@ -253,7 +180,6 @@ export const useVaultSparkContract = () => {
         // Continue with fixed gas - estimation might fail but execution could work
       }
       
->>>>>>> temp-private
       // Execute transaction with minimal gas and conservative approach
       const tx = await contract.methods
         .swap(tokenInAddress, tokenOutAddress, amountWei)
@@ -268,9 +194,6 @@ export const useVaultSparkContract = () => {
       return tx;
     } catch (error: any) {
       console.error('Swap error:', error);
-<<<<<<< HEAD
-      toast.error(`Swap failed: ${error.message || 'Unknown error'}`);
-=======
       
       // Better error messaging
       if (error.message.includes('revert')) {
@@ -280,7 +203,6 @@ export const useVaultSparkContract = () => {
       } else {
         toast.error(`Swap failed: ${error.message || 'Unknown error'}`);
       }
->>>>>>> temp-private
     } finally {
       setLoading(false);
     }
@@ -370,8 +292,6 @@ export const useVaultSparkContract = () => {
     }
   }, [account, web3, getContract]);
 
-<<<<<<< HEAD
-=======
   const withdrawLending = useCallback(async (index: number) => {
     if (!account || !web3) {
       toast.error('Please connect your wallet first');
@@ -435,7 +355,6 @@ export const useVaultSparkContract = () => {
     }
   }, [account, web3, getContract]);
 
->>>>>>> temp-private
   const calculateSwapAmount = useCallback(async (
     tokenIn: string,
     tokenOut: string,
@@ -468,11 +387,8 @@ export const useVaultSparkContract = () => {
     swapTokens,
     lendTokens,
     borrowTokens,
-<<<<<<< HEAD
-=======
     withdrawLending,
     repayBorrow,
->>>>>>> temp-private
     calculateSwapAmount,
     loading,
     isConnected,
