@@ -76,18 +76,17 @@ contract VaultSpark is Ownable(msg.sender), ReentrancyGuard {
         uint256 amountOut = (amountIn * priceIn) / priceOut;
         require(liquidity[tokenOut] >= amountOut, "Low liquidity");
 
+        // For demo purposes - only handle native BDAG transactions
+        // Mock tokens don't require actual transfers since they're just for demo
         if (tokenIn == address(0)) {
             require(msg.value == amountIn, "Incorrect BDAG sent");
-        } else {
-            IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
         }
 
         if (tokenOut == address(0)) {
             payable(msg.sender).transfer(amountOut);
-        } else {
-            IERC20(tokenOut).transfer(msg.sender, amountOut);
         }
 
+        // Update liquidity for both tokens (even mock ones for demo accounting)
         liquidity[tokenOut] -= amountOut;
         liquidity[tokenIn] += amountIn;
 
@@ -97,10 +96,9 @@ contract VaultSpark is Ownable(msg.sender), ReentrancyGuard {
     function lend(address token, uint256 amount) external payable nonReentrant {
         require(tokens[token].supported, "Unsupported");
 
+        // For demo purposes - only handle native BDAG, mock tokens are simulated
         if (token == address(0)) {
             require(msg.value == amount, "BDAG mismatch");
-        } else {
-            IERC20(token).transferFrom(msg.sender, address(this), amount);
         }
 
         liquidity[token] += amount;
@@ -117,16 +115,13 @@ contract VaultSpark is Ownable(msg.sender), ReentrancyGuard {
 
         require(valueProvided * 100 / valueNeeded >= 150, "Collateral too low");
 
+        // For demo purposes - only handle native BDAG transactions
         if (collateralToken == address(0)) {
             require(msg.value == collateral, "Collateral mismatch");
-        } else {
-            IERC20(collateralToken).transferFrom(msg.sender, address(this), collateral);
         }
 
         if (token == address(0)) {
             payable(msg.sender).transfer(amount);
-        } else {
-            IERC20(token).transfer(msg.sender, amount);
         }
 
         liquidity[token] -= amount;
